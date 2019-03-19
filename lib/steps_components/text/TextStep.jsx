@@ -60,6 +60,15 @@ class TextStep extends Component {
     return this.getMessage();
   }
 
+  bubbleIndexClasses() {
+    const { isFirst, isLast } = this.props;
+    if (isFirst) {
+      return 'rsc-ts-bubble-first';
+    } else if (isLast) {
+      return 'rsc-ts-bubble-last'
+    }
+  }
+
   render() {
     const {
       step,
@@ -74,7 +83,7 @@ class TextStep extends Component {
     const { avatar, user } = step;
 
     const showAvatar = user ? !hideUserAvatar : !hideBotAvatar;
-
+    
     return (
       <TextStepContainer className={`rsc-ts ${user ? 'rsc-ts-user' : 'rsc-ts-bot'}`} user={user}>
         <ImageContainer className="rsc-ts-image-container" user={user}>
@@ -93,6 +102,7 @@ class TextStep extends Component {
         </ImageContainer>
         <Bubble
           className="rsc-ts-bubble"
+          className={`rsc-ts-bubble ${this.bubbleIndexClasses()}`}
           style={bubbleStyle}
           user={user}
           showAvatar={showAvatar}
