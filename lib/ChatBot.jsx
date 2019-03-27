@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Random from 'random-id';
+import smoothscroll from 'smoothscroll-polyfill';
 import { CustomStep, OptionsStep, TextStep } from './steps_components';
 import schema from './schemas/schema';
 import * as storage from './storage';
@@ -129,7 +130,7 @@ class ChatBot extends Component {
 
   componentDidMount() {
     const { recognitionEnable } = this.state;
-    const { recognitionLang } = this.props;
+    const { recognitionLang, enableSmoothScroll } = this.props;
 
     if (recognitionEnable) {
       this.recognition = new Recognition(
@@ -138,6 +139,10 @@ class ChatBot extends Component {
         this.onRecognitionStop,
         recognitionLang
       );
+    }
+
+    if (enableSmoothScroll) {
+      smoothscroll.polyfill();
     }
 
     if (this.content) {
@@ -162,7 +167,18 @@ class ChatBot extends Component {
   }
 
   onNodeInserted = event => {
-    event.currentTarget.scrollTop = event.currentTarget.scrollHeight;
+    const { currentTarget: target } = event;
+    const { enableSmoothScroll } = this.props;
+
+    if (enableSmoothScroll) {
+      target.scroll({
+        top: target.scrollHeight,
+        left: 0,
+        behavior: 'smooth'
+      });
+    } else {
+      target.scrollTop = target.scrollHeight;
+    }
   };
 
   onResize = () => {
@@ -697,6 +713,7 @@ ChatBot.propTypes = {
   customDelay: PropTypes.number,
   customStyle: PropTypes.objectOf(PropTypes.any),
   enableMobileAutoFocus: PropTypes.bool,
+  enableSmoothScroll: PropTypes.bool,
   floating: PropTypes.bool,
   floatingIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   floatingStyle: PropTypes.objectOf(PropTypes.any),
@@ -745,6 +762,7 @@ ChatBot.defaultProps = {
   customStyle: {},
   customDelay: 1000,
   enableMobileAutoFocus: false,
+  enableSmoothScroll: true,
   floating: false,
   floatingIcon: <ChatIcon />,
   floatingStyle: {},

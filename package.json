@@ -91,7 +91,8 @@
     "prop-types": "^15.6.0",
     "random-id": "0.0.2",
     "react": "^16.4.1",
-    "react-dom": "^16.4.1"
+    "react-dom": "^16.4.1",
+    "smoothscroll-polyfill": "^0.4.4"
   },
   "peerDependencies": {
     "styled-components": "^4.0.0",
